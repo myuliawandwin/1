@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WWN - Wealth Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="logo-container">
+            <div class="money-logo">
+                <i class="fas fa-coins"></i>
+            </div>
+            <h1>WWN</h1>
+            <p>Wealth & Worth Navigator</p>
+        </div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app-container" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="money-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <span>WWN</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="transactions">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Transaksi</span>
+                </a>
+                <a href="#" class="nav-item" data-page="budgets">
+                    <i class="fas fa-wallet"></i>
+                    <span>Anggaran</span>
+                </a>
+                <a href="#" class="nav-item" data-page="accounts">
+                    <i class="fas fa-university"></i>
+                    <span>Akun</span>
+                </a>
+                <a href="#" class="nav-item" data-page="investments">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Investasi</span>
+                </a>
+                <a href="#" class="nav-item" data-page="debts">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Utang & Piutang</span>
+                </a>
+                <a href="#" class="nav-item" data-page="goals">
+                    <i class="fas fa-bullseye"></i>
+                    <span>Target Keuangan</span>
+                </a>
+                <a href="#" class="nav-item" data-page="reports">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>Laporan</span>
+                </a>
+                <a href="#" class="nav-item" data-page="ai-advisor">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Advisor</span>
+                </a>
+                <a href="#" class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Pengaturan</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="name">User</span>
+                        <span class="email">user@wwn.com</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari transaksi, akun, atau laporan...">
+                </div>
+                <div class="top-actions">
+                    <button class="btn-icon" id="notificationBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <button class="btn-primary" id="addTransactionBtn">
+                        <i class="fas fa-plus"></i>
+                        <span>Transaksi Baru</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div id="pageContent" class="page-content">
+                <!-- Dashboard Page -->
+                <div id="dashboardPage" class="page active">
+                    <div class="page-header">
+                        <h1>Dashboard</h1>
+                        <p class="subtitle">Ringkasan keuangan Anda hari ini</p>
+                    </div>
+
+                    <!-- Net Worth Card -->
+                    <div class="net-worth-card">
+                        <div class="nw-header">
+                            <h2>Kekayaan Bersih</h2>
+                            <span class="trend positive"><i class="fas fa-arrow-up"></i> +12.5%</span>
+                        </div>
+                        <div class="nw-amount" id="totalNetWorth">Rp 0</div>
+                        <div class="nw-chart">
+                            <canvas id="netWorthChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card income">
+                            <div class="stat-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Pemasukan Bulan Ini</span>
+                                <span class="stat-value" id="monthlyIncome">Rp 0</span>
+                                <span class="stat-change positive">+8.2%</span>
+                            </div>
+                        </div>
+                        <div class="stat-card expense">
+                            <div class="stat-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Pengeluaran Bulan Ini</span>
+                                <span class="stat-value" id="monthlyExpense">Rp 0</span>
+                                <span class="stat-change negative">+3.1%</span>
+                            </div>
+                        </div>
+                        <div class="stat-card savings">
+                            <div class="stat-icon">
+                                <i class="fas fa-piggy-bank"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Tabungan</span>
+                                <span class="stat-value" id="totalSavings">Rp 0</span>
+                                <span class="stat-change positive">+15.3%</span>
+                            </div>
+                        </div>
+                        <div class="stat-card investments">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Investasi</span>
+                                <span class="stat-value" id="totalInvestments">Rp 0</span>
+                                <span class="stat-change positive">+22.7%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="charts-section">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Arus Kas</h3>
+                                <div class="chart-actions">
+                                    <button class="btn-sm active">Minggu</button>
+                                    <button class="btn-sm">Bulan</button>
+                                    <button class="btn-sm">Tahun</button>
+                                </div>
+                            </div>
+                            <canvas id="cashFlowChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Kategori Pengeluaran</h3>
+                                <select class="select-sm">
+                                    <option>Bulan Ini</option>
+                                    <option>Bulan Lalu</option>
+                                </select>
+                            </div>
+                            <canvas id="expenseCategoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="recent-section">
+                        <div class="section-header">
+                            <h3>Transaksi Terakhir</h3>
+                            <a href="#" class="view-all" data-page="transactions">Lihat Semua</a>
+                        </div>
+                        <div class="transaction-list" id="recentTransactions">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Budget Progress -->
+                    <div class="budget-section">
+                        <div class="section-header">
+                            <h3>Progress Anggaran</h3>
+                            <a href="#" class="view-all" data-page="budgets">Kelola Anggaran</a>
+                        </div>
+                        <div class="budget-grid" id="budgetProgress">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Page -->
+                <div id="transactionsPage" class="page">
+                    <div class="page-header">
+                        <h1>Transaksi</h1>
+                        <p class="subtitle">Kelola semua transaksi keuangan Anda</p>
+                    </div>
+
+                    <div class="transactions-toolbar">
+                        <div class="filter-group">
+                            <button class="filter-btn active" data-filter="all">Semua</button>
+                            <button class="filter-btn" data-filter="income">Pemasukan</button>
+                            <button class="filter-btn" data-filter="expense">Pengeluaran</button>
+                        </div>
+                        <div class="search-filter">
+                            <input type="text" placeholder="Cari transaksi..." id="transactionSearch">
+                            <select id="categoryFilter">
+                                <option value="">Semua Kategori</option>
+                            </select>
+                            <input type="date" id="dateFrom">
+                            <input type="date" id="dateTo">
+                        </div>
+                    </div>
+
+                    <div class="transactions-table-container">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Kategori</th>
+                                    <th>Deskripsi</th>
+                                    <th>Akun</th>
+                                    <th>Jumlah</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Budgets Page -->
+                <div id="budgetsPage" class="page">
+                    <div class="page-header">
+                        <h1>Anggaran</h1>
+                        <p class="subtitle">Kelola dan pantau anggaran bulanan Anda</p>
+                    </div>
+
+                    <div class="budget-overview">
+                        <div class="budget-summary">
+                            <div class="summary-item">
+                                <span class="label">Total Anggaran</span>
+                                <span class="value" id="totalBudget">Rp 0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Telah Digunakan</span>
+                                <span class="value" id="usedBudget">Rp 0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Sisa Anggaran</span>
+                                <span class="value" id="remainingBudget">Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="budget-categories" id="budgetCategories">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <button class="btn-primary floating" id="addBudgetBtn">
+                        <i class="fas fa-plus"></i>
+                        Tambah Anggaran
+                    </button>
+                </div>
+
+                <!-- Accounts Page -->
+                <div id="accountsPage" class="page">
+                    <div class="page-header">
+                        <h1>Akun</h1>
+                        <p class="subtitle">Kelola akun bank, dompet digital, dan aset Anda</p>
+                    </div>
+
+                    <div class="accounts-grid" id="accountsGrid">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <button class="btn-primary floating" id="addAccountBtn">
+                        <i class="fas fa-plus"></i>
+                        Tambah Akun
+                    </button>
+                </div>
+
+                <!-- Investments Page -->
+                <div id="investmentsPage" class="page">
+                    <div class="page-header">
+                        <h1>Investasi</h1>
+                        <p class="subtitle">Pantau portofolio investasi Anda</p>
+                    </div>
+
+                    <div class="investment-overview">
+                        <div class="investment-summary">
+                            <div class="summary-card">
+                                <span class="label">Total Nilai Investasi</span>
+                                <span class="value" id="totalInvestmentValue">Rp 0</span>
+                            </div>
+                            <div class="summary-card">
+                                <span class="label">Total Keuntungan</span>
+                                <span class="value positive" id="totalInvestmentProfit">Rp 0</span>
+                            </div>
+                            <div class="summary-card">
+                                <span class="label">Persentase Return</span>
+                                <span class="value positive" id="totalInvestmentReturn">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portfolio-allocation">
+                        <h3>Alokasi Portofolio</h3>
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+
+                    <div class="investments-list" id="investmentsList">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <button class="btn-primary floating" id="addInvestmentBtn">
+                        <i class="fas fa-plus"></i>
+                        Tambah Investasi
+                    </button>
+                </div>
+
+                <!-- Debts Page -->
+                <div id="debtsPage" class="page">
+                    <div class="page-header">
+                        <h1>Utang & Piutang</h1>
+                        <p class="subtitle">Kelola utang dan piutang Anda</p>
+                    </div>
+
+                    <div class="debts-overview">
+                        <div class="debt-card debt">
+                            <h3>Total Utang</h3>
+                            <span class="amount" id="totalDebt">Rp 0</span>
+                        </div>
+                        <div class="debt-card receivable">
+                            <h3>Total Piutang</h3>
+                            <span class="amount" id="totalReceivable">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <div class="debts-list" id="debtsList">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <button class="btn-primary floating" id="addDebtBtn">
+                        <i class="fas fa-plus"></i>
+                        Tambah Utang/Piutang
+                    </button>
+                </div>
+
+                <!-- Goals Page -->
+                <div id="goalsPage" class="page">
+                    <div class="page-header">
+                        <h1>Target Keuangan</h1>
+                        <p class="subtitle">Rencanakan dan capai tujuan keuangan Anda</p>
+                    </div>
+
+                    <div class="goals-grid" id="goalsGrid">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <button class="btn-primary floating" id="addGoalBtn">
+                        <i class="fas fa-plus"></i>
+                        Tambah Target
+                    </button>
+                </div>
+
+                <!-- Reports Page -->
+                <div id="reportsPage" class="page">
+                    <div class="page-header">
+                        <h1>Laporan</h1>
+                        <p class="subtitle">Analisis mendalam keuangan Anda</p>
+                    </div>
+
+                    <div class="reports-filters">
+                        <select id="reportType">
+                            <option value="income-expense">Laporan Pemasukan & Pengeluaran</option>
+                            <option value="net-worth">Laporan Kekayaan Bersih</option>
+                            <option value="cash-flow">Laporan Arus Kas</option>
+                            <option value="category">Laporan per Kategori</option>
+                        </select>
+                        <select id="reportPeriod">
+                            <option value="week">Minggu Ini</option>
+                            <option value="month">Bulan Ini</option>
+                            <option value="year">Tahun Ini</option>
+                            <option value="custom">Kustom</option>
+                        </select>
+                        <button class="btn-primary">
+                            <i class="fas fa-download"></i>
+                            Export PDF
+                        </button>
+                    </div>
+
+                    <div class="report-content" id="reportContent">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- AI Advisor Page -->
+                <div id="aiAdvisorPage" class="page">
+                    <div class="page-header">
+                        <h1>AI Financial Advisor</h1>
+                        <p class="subtitle">Asisten keuangan berbasis AI untuk rekomendasi personal</p>
+                    </div>
+
+                    <div class="ai-chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message ai">
+                                <div class="message-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="message-content">
+                                    <p>Halo! Saya AI Advisor WWN. Saya dapat membantu Anda dengan:</p>
+                                    <ul>
+                                        <li>Analisis pola pengeluaran</li>
+                                        <li>Rekomendasi penganggaran</li>
+                                        <li>Saran investasi berdasarkan profil risiko</li>
+                                        <li>Prediksi keuangan masa depan</li>
+                                        <li>Tips mengoptimalkan keuangan</li>
+                                    </ul>
+                                    <p>Apa yang ingin Anda ketahui tentang keuangan Anda?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" placeholder="Tanyakan sesuatu tentang keuangan Anda..." id="chatInput">
+                            <button class="btn-primary" id="sendChatBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="ai-insights">
+                        <h3>Insight AI Untuk Anda</h3>
+                        <div class="insights-grid" id="aiInsights">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="settingsPage" class="page">
+                    <div class="page-header">
+                        <h1>Pengaturan</h1>
+                        <p class="subtitle">Konfigurasi aplikasi sesuai preferensi Anda</p>
+                    </div>
+
+                    <div class="settings-sections">
+                        <div class="settings-section">
+                            <h3>Profil</h3>
+                            <div class="setting-item">
+                                <label>Nama Lengkap</label>
+                                <input type="text" id="userName" placeholder="Masukkan nama Anda">
+                            </div>
+                            <div class="setting-item">
+                                <label>Email</label>
+                                <input type="email" id="userEmail" placeholder="Masukkan email">
+                            </div>
+                            <div class="setting-item">
+                                <label>Mata Uang</label>
+                                <select id="currency">
+                                    <option value="IDR">Rupiah (IDR)</option>
+                                    <option value="USD">Dollar (USD)</option>
+                                    <option value="EUR">Euro (EUR)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Preferensi</h3>
+                            <div class="setting-item">
+                                <label>Tema</label>
+                                <select id="theme">
+                                    <option value="light">Terang</option>
+                                    <option value="dark">Gelap</option>
+                                    <option value="auto">Otomatis</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label>Bahasa</label>
+                                <select id="language">
+                                    <option value="id">Bahasa Indonesia</option>
+                                    <option value="en">English</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Data</h3>
+                            <button class="btn-secondary" id="exportDataBtn">
+                                <i class="fas fa-download"></i>
+                                Export Data
+                            </button>
+                            <button class="btn-danger" id="importDataBtn">
+                                <i class="fas fa-upload"></i>
+                                Import Data
+                            </button>
+                            <button class="btn-danger" id="resetDataBtn">
+                                <i class="fas fa-trash"></i>
+                                Reset Semua Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Tambah Transaksi</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="transactionForm">
+                <div class="form-group">
+                    <label>Jenis Transaksi</label>
+                    <div class="toggle-group">
+                        <button type="button" class="toggle-btn active" data-type="expense">Pengeluaran</button>
+                        <button type="button" class="toggle-btn" data-type="income">Pemasukan</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Jumlah</label>
+                    <input type="number" id="transactionAmount" required placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select id="transactionCategory" required>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Deskripsi</label>
+                    <input type="text" id="transactionDescription" placeholder="Contoh: Makan siang">
+                </div>
+                <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" id="transactionDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Akun</label>
+                    <select id="transactionAccount" required>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Catatan</label>
+                    <textarea id="transactionNotes" rows="3" placeholder="Catatan tambahan (opsional)"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary close-modal">Batal</button>
+                    <button type="submit" class="btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div id="notificationPanel" class="notification-panel">
+        <div class="panel-header">
+            <h3>Notifikasi</h3>
+            <button class="clear-all">Hapus Semua</button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
